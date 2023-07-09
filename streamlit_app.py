@@ -19,3 +19,8 @@ iris3
 iris4 = pd.read_csv('https://raw.githubusercontent.com/ronalth26/git-prueba/3c2bc32f088cba5752937f6d3ad386c58581a150/corto3.csv',sep=',',encoding='iso-8859-1'
                  )
 iris4
+
+
+iris5 = pd.read_csv('https://raw.githubusercontent.com/ronalth26/git-prueba/master/lista-residuos.csv',sep=',',encoding='iso-8859-1'
+                 )
+iris5
