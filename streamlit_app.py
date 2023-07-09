@@ -16,6 +16,6 @@ iris3 = pd.read_csv('https://github.com/ronalth26/git-prueba/blob/c08197d989bdbf
                  )
 iris3
 
-iris4 = pd.read_csv('https://github.com/ronalth26/git-prueba/blob/c08197d989bdbf1a2e60014d230aa0907aa75f26/corto3.csv',sep=',',encoding='iso-8859-1'
+iris4 = pd.read_csv('https://raw.githubusercontent.com/ronalth26/git-prueba/3c2bc32f088cba5752937f6d3ad386c58581a150/corto3.csv',sep=',',encoding='iso-8859-1'
                  )
 iris4
