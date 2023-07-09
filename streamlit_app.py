@@ -5,10 +5,11 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 
-
+@st.cache
 df = pd.read_csv('lista-residuos.csv')
-print(df.to_string()) 
+  return df
 
+df=load_data()
 """
 # Welcome to Streamlit!
 
