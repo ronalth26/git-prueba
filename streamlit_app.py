@@ -8,7 +8,7 @@ import streamlit as st
 
 
 # Read the CSV file
-airbnb_data = pd.read_csv("lista-residuos.csv")
+airbnb_data = pd.read_csv("../lista-residuos.csv")
 
 # View the first 5 rows
 airbnb_data.head()
