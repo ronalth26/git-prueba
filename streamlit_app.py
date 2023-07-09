@@ -7,12 +7,12 @@ iris = pd.read_csv('https://raw.githubusercontent.com/ayrna/tutorial-scikit-lear
 iris
 
 
-iris2 = pd.read_csv('https://github.com/ronalth26/git-prueba/blob/c08197d989bdbf1a2e60014d230aa0907aa75f26/corto.csv',sep=';',encoding='iso-8859-1'
+iris2 = pd.read_csv('https://raw.githubusercontent.com/ronalth26/git-prueba/master/corto.csv',sep=';',encoding='iso-8859-1'
                  )
 iris2
 
 
-iris3 = pd.read_csv('https://github.com/ronalth26/git-prueba/blob/c08197d989bdbf1a2e60014d230aa0907aa75f26/corto2.csv',sep=',',encoding='iso-8859-1'
+iris3 = pd.read_csv('https://raw.githubusercontent.com/ronalth26/git-prueba/master/corto2.csv',sep=',',encoding='iso-8859-1'
                  )
 iris3
 
