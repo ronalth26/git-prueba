@@ -6,8 +6,6 @@ iris = pd.read_csv('https://raw.githubusercontent.com/ayrna/tutorial-scikit-lear
                  )
 iris
 
+iris.head(3)
 
 
-iris.head(9)
-
-iris
