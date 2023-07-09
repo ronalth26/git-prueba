@@ -6,14 +6,9 @@ import pandas as pd
 import streamlit as st
 
 
-@st.cache
-def load_data():
-  df=pd.read_csv('../lista-residuos.csv',sep=';',encoding='iso-8859-1')
-  return df
 
-df=load_data()
-
-
+url='https://github.com/ronalth26/git-prueba/blob/d5d489db633aafb6943148492b3fcafe2e8c48fb/lista-residuos.csv'
+df=pd.read_csv(url)
 
 
 """
