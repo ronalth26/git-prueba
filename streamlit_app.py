@@ -1,8 +1,13 @@
 from collections import namedtuple
 import altair as alt
 import math
+import numpy as np
 import pandas as pd
 import streamlit as st
+
+
+df = pd.read_csv('lista-residuos.csv')
+print(df.to_string()) 
 
 """
 # Welcome to Streamlit!
@@ -15,10 +20,4 @@ forums](https://discuss.streamlit.io).
 In the meantime, below is an example of what you can do with just a few lines of code:
 """
 
-import matplotlib.pyplot as plt
-plt.figure(figsize=(10,10))
-plt.plot(data['POB_URBANA'],data['QRESIDUOS_DOM'],'.', color='green')
-plt.title('Generación de residuos domiciliarios para una población urbana')
-plt.xlabel('QRESIDUOS_DOM')
-plt.ylabel('POB_URBANA')
-plt.show()
+df = pd.DataFrame(np.random.randn(100, 4),  columns=['A','B','C','D'])
