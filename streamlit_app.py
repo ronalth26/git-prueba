@@ -7,7 +7,7 @@ import streamlit as st
 
 @st.cache
 def load_data():
-  df=pd.read_csv('lista-residuos.csv',sep=';',encoding='iso-8859-1')
+  df=pd.read_csv('https://github.com/ronalth26/git-prueba/blob/ccfc74218dfbe9876af6da2e4fc4f4104b37c66d/lista-residuos.csv')
   return df
 
 df=load_data()
