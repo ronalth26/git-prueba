@@ -21,3 +21,11 @@ iris3
 iris5 = pd.read_csv('https://raw.githubusercontent.com/ronalth26/git-prueba/master/lista-residuos.csv',sep=';',encoding='iso-8859-1'
                  )
 iris5
+
+import matplotlib.pyplot as plt
+plt.figure(figsize=(10,10))
+plt.plot(data['POB_URBANA'],data['QRESIDUOS_DOM'],'.', color='green')
+plt.title('Generación de residuos domiciliarios para una población urbana')
+plt.xlabel('QRESIDUOS_DOM')
+plt.ylabel('POB_URBANA')
+plt.show()
