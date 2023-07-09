@@ -6,12 +6,14 @@ import pandas as pd
 import streamlit as st
 
 
+@st.cache
 
-# Read the CSV file
-airbnb_data = pd.read_csv("../lista-residuos.csv")
+def=pd.read_csv('lista-residuos.csv',sep=';',encoding='iso-8859-1')
+  return df
 
-# View the first 5 rows
-airbnb_data.head()
+df=load_data()
+
+
 
 
 """
