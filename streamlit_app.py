@@ -6,7 +6,7 @@ import pandas as pd
 import streamlit as st
 
 @st.cache
-df = pd.read_csv('lista-residuos.csv')
+def = pd.read_csv('lista-residuos.csv')
   return df
 
 df=load_data()
