@@ -18,9 +18,9 @@ iris3
 
 
 
-iris5 = pd.read_csv('https://raw.githubusercontent.com/ronalth26/git-prueba/master/lista-residuos.csv',sep=';',encoding='iso-8859-1'
+data = pd.read_csv('https://raw.githubusercontent.com/ronalth26/git-prueba/master/lista-residuos.csv',sep=';',encoding='iso-8859-1'
                  )
-iris5
+data
 
 import matplotlib.pyplot as plt
 plt.figure(figsize=(10,10))
