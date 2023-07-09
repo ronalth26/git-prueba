@@ -14,3 +14,4 @@ iris
 .dataframe thead th {
     text-align: right;
 }
+</style>
