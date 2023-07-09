@@ -8,7 +8,7 @@ import streamlit as st
 
 @st.cache
 
-def=pd.read_csv('lista-residuos.csv',sep=';',encoding='iso-8859-1')
+def=pd.read_csv('../lista-residuos.csv',sep=';',encoding='iso-8859-1')
   return df
 
 df=load_data()
