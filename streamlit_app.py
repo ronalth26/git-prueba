@@ -5,11 +5,15 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 
-@st.cache
-def = pd.read_csv('lista-residuos.csv')
-  return df
 
-df=load_data()
+
+# Read the CSV file
+airbnb_data = pd.read_csv("lista-residuos.csv")
+
+# View the first 5 rows
+airbnb_data.head()
+
+
 """
 # Welcome to Streamlit!
 
@@ -21,4 +25,4 @@ forums](https://discuss.streamlit.io).
 In the meantime, below is an example of what you can do with just a few lines of code:
 """
 
-df = pd.DataFrame(np.random.randn(100, 4),  columns=['A','B','C','D'])
+
