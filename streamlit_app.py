@@ -26,6 +26,19 @@ st.subheader('Gráfico')
 st.area_chart(data)
 st.subheader('E')
 
+import streamlit as st
+
+from PIL import Image
+
+
+
+#opening the image
+
+from PIL import Image
+
+image = Image.open('img.jpg')
+
+
 
 
 
