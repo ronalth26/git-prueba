@@ -30,10 +30,6 @@ st.image("https://raw.githubusercontent.com/ronalth26/git-prueba/master/img.JPG"
 fig, ax = plt.subplots()
 ax.scatter(data['POB_URBANA'], data['QRESIDUOS_DOM'])
 
-# Agregar una línea al gráfico de dispersión
-line_x = [min(data['POB_URBANA']), max(data['QRESIDUOS_DOM'])]  # Valores para el eje X de la línea
-line_y = [3, 3]  # Valores para el eje Y de la línea
-ax.plot(line_x, line_y, color='red', linestyle='--', label='Línea')  # Personalizar la línea según tus necesidades
 
 
 # Establecer etiquetas y título
