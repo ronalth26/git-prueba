@@ -44,15 +44,6 @@ ax.set_title('Gráfico de Dispersión')
 
 # Mostrar el gráfico en Streamlit
 st.pyplot(fig)
-Asegúrate de reemplazar 'ruta/al/archivo.csv' con la ruta real de tu archivo CSV. Además, reemplaza 'ColumnaX' y 'ColumnaY' con los nombres de las columnas correspondientes a los valores del eje X y del eje Y en tu dataset.
-
-Una vez que hayas leído los datos del archivo CSV en un DataFrame de Pandas, puedes utilizar scatter() de matplotlib.pyplot para crear el gráfico de dispersión. Luego, puedes personalizar las etiquetas de los ejes y el título según tus necesidades.
-
-Finalmente, utiliza st.pyplot(fig) para mostrar el gráfico en Streamlit. La función pyplot() de Streamlit renderizará el gráfico de Matplotlib en la interfaz de Streamlit.
-
-
-
-
 
 
 
