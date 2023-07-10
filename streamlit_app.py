@@ -11,7 +11,7 @@ st.subheader('La GPC de residuos domiciliarios es un dato obtenido de los estudi
 
 nombre_variables = ["POB_URBANA", "QRESIDUOS_DOM"]
 
-df  = pd.read_csv('https://raw.githubusercontent.com/ronalth26/git-prueba/master/lista-residuos.csv',sep=';',encoding='iso-8859-1'
+df = pd.read_csv('https://raw.githubusercontent.com/ronalth26/git-prueba/master/lista-residuos.csv',sep=';',encoding='iso-8859-1'
                  )
 df 
 
@@ -24,5 +24,8 @@ data
 
 st.subheader('Gráfico') 
 
+st.area_chart(df)
 grafica=alt.Chart(df).mark_circle().enconde(x="POB_URBANA",y="QRESIDUOS_DOM")
+
+
 st.altair_chart(grafica)
