@@ -1,7 +1,7 @@
 import pandas as pd
 import streamlit as st
 import altair as alt
-
+import plotly.express as px  # pip install plotly-express
 
 #from PIL import Image
 
