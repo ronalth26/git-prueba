@@ -24,7 +24,7 @@ data
 st.subheader('Gráfico') 
 
 st.area_chart(data)
+st.subheader('E')
 grafica=alt.Chart(data).mark_circle().enconde(x="POB_URBANA",y="QRESIDUOS_DOM")
-
-
+st.subheader('E2')
 st.altair_chart(grafica,use_container_width=True)
