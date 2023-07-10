@@ -21,3 +21,8 @@ st.subheader('El objetivo sería determinar si existe una relación lineal entre
 data  = pd.read_csv('https://raw.githubusercontent.com/ronalth26/git-prueba/master/lista-residuos.csv',sep=';',encoding='iso-8859-1',  usecols=["POB_URBANA", "QRESIDUOS_DOM"]                       
                  )
 data
+
+st.subheader('Gráfico') 
+
+
+
