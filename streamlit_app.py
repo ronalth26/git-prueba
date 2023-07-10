@@ -1,6 +1,7 @@
 import pandas as pd
 import streamlit as st
 import altair as alt
+import numpy as np
 
 #from PIL import Image
 
@@ -30,3 +31,17 @@ st.altair_chart(data)
 grafica=alt.Chart(data).mark_circle().enconde(x="POB_URBANA",y="QRESIDUOS_DOM")
 st.subheader('E2')
 st.altair_chart(grafica,use_container_width=True)
+
+chart_data = pd.DataFrame(
+    np.random.randn(200, 3),
+    columns=['a', 'b', 'c'])
+
+st.vega_lite_chart(chart_data, {
+    'mark': {'type': 'circle', 'tooltip': True},
+    'encoding': {
+        'x': {'field': 'a', 'type': 'quantitative'},
+        'y': {'field': 'b', 'type': 'quantitative'},
+        'size': {'field': 'c', 'type': 'quantitative'},
+        'color': {'field': 'c', 'type': 'quantitative'},
+    },
+})
