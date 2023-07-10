@@ -21,6 +21,8 @@ df  = pd.read_csv('https://raw.githubusercontent.com/ronalth26/git-prueba/master
                  )
 df
 
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
 
 # Input widgets
 st.sidebar.subheader('Input features')
