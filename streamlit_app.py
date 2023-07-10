@@ -3,6 +3,20 @@ import streamlit as st
 import altair as alt
 import numpy as np
 
+import seaborn as sns
+import matplotlib.pyplot as plt
+fig = plt.figure(figsize=(10, 4))
+sns.countplot(x="class", data=titanic)
+
+st.pyplot(fig)
+
+
+titanic = sns.load_dataset("titanic")
+
+fig = plt.figure(figsize=(10, 4))
+sns.countplot(x="class", data=titanic)
+
+st.pyplot(fig)
 
 st.set_page_config(page_title="Datos Abiertos") # Nombre para configurar la pagina web
 st.header('Residuos municipalidades generados anualmente') #Va a ser el titulo de la pagina
@@ -28,17 +42,7 @@ st.subheader('E')
 
 
 
+fig = plt.figure(figsize=(10, 4))
+sns.countplot(x="class", data=data)
 
-chart_data = pd.DataFrame(
-    np.random.data,
-    columns=['POB_URBANA', 'QRESIDUOS_DOM'])
-
-st.vega_lite_chart(chart_data, {
-    'mark': {'type': 'circle', 'tooltip': True},
-    'encoding': {
-        'x': {'field': 'a', 'type': 'quantitative'},
-        'y': {'field': 'b', 'type': 'quantitative'},
-        'size': {'field': 'c', 'type': 'quantitative'},
-        'color': {'field': 'c', 'type': 'quantitative'},
-    },
-})
+st.pyplot(fig)
