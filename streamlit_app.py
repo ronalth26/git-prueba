@@ -24,5 +24,5 @@ data
 
 st.subheader('Gráfico') 
 
-grafica=alt.Chart(df).mark_circle().enconde(x="a",y="b")
+grafica=alt.Chart(df).mark_circle().enconde(x="POB_URBANA",y="QRESIDUOS_DOM")
 st.altair_chart(grafica)
