@@ -1,6 +1,6 @@
 import pandas as pd
 import streamlit as st
-import plotly.express as px #pip install plotly-express
+
 #from PIL import Image
 
 st.set_page_config(page_title="Encuesta Oficial EPS") # Nombre para configurar la pagina web
