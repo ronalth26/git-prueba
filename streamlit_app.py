@@ -24,8 +24,8 @@ data
 
 st.subheader('Gráfico') 
 
-st.area_chart(df)
-grafica=alt.Chart(df).mark_circle().enconde(x="POB_URBANA",y="QRESIDUOS_DOM")
+st.area_chart(data)
+grafica=alt.Chart(data).mark_circle().enconde(x="POB_URBANA",y="QRESIDUOS_DOM")
 
 
 st.altair_chart(grafica)
