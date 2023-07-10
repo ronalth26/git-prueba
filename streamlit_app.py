@@ -27,6 +27,20 @@ st.area_chart(data)
 st.subheader('E')
 
 
+from streamlit_image_select import image_select
+
+img = image_select(
+    label="Select a cat",
+    images=[
+        "images/cat1.jpeg",
+        "https://bagongkia.github.io/react-image-picker/0759b6e526e3c6d72569894e58329d89.jpg",
+        Image.open("images/cat3.jpeg"),
+        np.array(Image.open("images/cat4.jpeg")),
+    ],
+    captions=["A cat", "Another cat", "Oh look, a cat!", "Guess what, a cat..."],
+)
+
+
 #opening the image
 
 W = {'img':[misc.imread('img.jpg')]}
