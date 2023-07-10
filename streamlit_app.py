@@ -26,8 +26,7 @@ st.subheader('Gráfico')
 st.area_chart(data)
 st.subheader('E')
 
-import IPython.display as display
-from PIL import Image
-display.display(Image.open('img.jpg'))
+from IPython.display import Image
+Image('img.jpg')
 
 
