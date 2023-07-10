@@ -2,7 +2,7 @@ import pandas as pd
 import streamlit as st
 import altair as alt
 import numpy as np
-
+import matplotlib.pyplot as plt
 
 st.set_page_config(page_title="Datos Abiertos") # Nombre para configurar la pagina web
 st.header('Residuos municipalidades generados anualmente') #Va a ser el titulo de la pagina
@@ -27,28 +27,7 @@ st.area_chart(data)
 st.subheader('E')
 
 
-from streamlit_image_select import image_select
 
-img = image_select(
-    label="Select a cat",
-    images=[
-        "images/cat1.jpeg",
-        "https://bagongkia.github.io/react-image-picker/0759b6e526e3c6d72569894e58329d89.jpg",
-        Image.open("images/cat3.jpeg"),
-        np.array(Image.open("images/cat4.jpeg")),
-    ],
-    captions=["A cat", "Another cat", "Oh look, a cat!", "Guess what, a cat..."],
-)
-
-
-#opening the image
-
-W = {'img':[misc.imread('img.jpg')]}
-df = pd.DataFrame(W)
-
-# This displays the image
-plt.imshow(df.img1[0])
-plt.show()
 
 
 
