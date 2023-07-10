@@ -2,7 +2,7 @@ import pandas as pd
 import streamlit as st
 import altair as alt
 import numpy as np
-
+import seaborn as sns
 #from PIL import Image
 
 st.set_page_config(page_title="Datos Abiertos") # Nombre para configurar la pagina web
@@ -26,6 +26,7 @@ st.subheader('Gráfico')
 
 st.area_chart(data)
 st.subheader('E')
+
 
 
 
