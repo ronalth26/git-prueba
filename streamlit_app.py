@@ -7,7 +7,7 @@ st.set_page_config(page_title="Datos Abiertos") # Nombre para configurar la pagi
 st.header('Residuos municipalidades generados anualmente') #Va a ser el titulo de la pagina
 st.subheader('La GPC de residuos domiciliarios es un dato obtenido de los estudios de caracterización elaborados por las municipalidades provinciales y distritales y se refiere a la generación de residuos sólidos por persona-día.') #Subtitulo
 
-nombre_variables = ['POB_URBANA', 'QRESIDUOS_DOM']
+nombre_variables = ["POB_URBANA", "QRESIDUOS_DOM"]
 
 excel_file  = pd.read_csv('https://raw.githubusercontent.com/ronalth26/git-prueba/master/lista-residuos.csv',sep=';',encoding='iso-8859-1'
                  )
