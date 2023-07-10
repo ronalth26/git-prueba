@@ -33,20 +33,24 @@ st.image("https://raw.githubusercontent.com/ronalth26/git-prueba/master/img.JPG"
 
 
 
+# Crear el gráfico de dispersión
+fig, ax = plt.subplots()
+ax.scatter(data['POB_URBANA'], data['QRESIDUOS_DOM'])
 
-colores=['orange','blue']
-tamanios=[30,60]
+# Establecer etiquetas y título
+ax.set_xlabel('Etiqueta del Eje X')
+ax.set_ylabel('Etiqueta del Eje Y')
+ax.set_title('Gráfico de Dispersión')
 
-f1 = data['POB_URBANA'].values
-f2 = data['QRESIDUOS_DOM'].values
+# Mostrar el gráfico en Streamlit
+st.pyplot(fig)
+Asegúrate de reemplazar 'ruta/al/archivo.csv' con la ruta real de tu archivo CSV. Además, reemplaza 'ColumnaX' y 'ColumnaY' con los nombres de las columnas correspondientes a los valores del eje X y del eje Y en tu dataset.
 
-# Vamos a pintar en colores los puntos por debajo y por encima de la media de Cantid\
- ad de Palabras
- asignar=[]
+Una vez que hayas leído los datos del archivo CSV en un DataFrame de Pandas, puedes utilizar scatter() de matplotlib.pyplot para crear el gráfico de dispersión. Luego, puedes personalizar las etiquetas de los ejes y el título según tus necesidades.
+
+Finalmente, utiliza st.pyplot(fig) para mostrar el gráfico en Streamlit. La función pyplot() de Streamlit renderizará el gráfico de Matplotlib en la interfaz de Streamlit.
 
 
-plt.scatter(f1, f2, c=asignar, s=tamanios[0])
-plt.show()
 
 
 
