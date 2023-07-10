@@ -18,7 +18,5 @@ st.subheader('El objetivo sería determinar si existe una relación lineal entre
 tabla  = pd.read_csv('https://raw.githubusercontent.com/ronalth26/git-prueba/master/lista-residuos.csv',sep=';',encoding='iso-8859-1', names=nombre_variables
                  )
 tabla 
-
-
-
 tabla.head() 
+tabla 
