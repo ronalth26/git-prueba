@@ -21,7 +21,7 @@ data  = pd.read_csv('https://raw.githubusercontent.com/ronalth26/git-prueba/mast
                  )
 data
 
-st.subheader('Gráfico') 
+st.subheader('Generación de residuos domiciliarios para una población urbana') 
 
 st.image("https://raw.githubusercontent.com/ronalth26/git-prueba/master/img.JPG", caption="Descripción de la imagen")
 
