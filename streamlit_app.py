@@ -30,8 +30,8 @@ st.subheader('E')
 
 
 chart_data = pd.DataFrame(
-    np.random.randn(200, 3),
-    columns=['a', 'b', 'c'])
+    np.random.data,
+    columns=['POB_URBANA', 'QRESIDUOS_DOM'])
 
 st.vega_lite_chart(chart_data, {
     'mark': {'type': 'circle', 'tooltip': True},
