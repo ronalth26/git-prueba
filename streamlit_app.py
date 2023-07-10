@@ -23,9 +23,6 @@ data
 
 st.subheader('Gráfico') 
 
-st.area_chart(data)
-st.subheader('E')
-
 st.image("https://raw.githubusercontent.com/ronalth26/git-prueba/master/img.JPG", caption="Descripción de la imagen")
 
 
