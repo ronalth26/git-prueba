@@ -20,6 +20,5 @@ tabla  = pd.read_csv('https://raw.githubusercontent.com/ronalth26/git-prueba/mas
 tabla 
 
 
-iris_data = pd.read_csv(tabla, names=nombre_variables)
 
-iris_data.head() 
+tabla.head() 
