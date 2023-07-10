@@ -24,5 +24,5 @@ data
 
 st.subheader('Gráfico') 
 
-
-e
+grafica=alt.Chart(df).mark_circle().enconde(x="a",y="b")
+st.altair_chart(grafica)
