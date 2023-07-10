@@ -1,7 +1,6 @@
 import pandas as pd
 import streamlit as st
 import altair as alt
-import plotly.express as px  # pip install plotly-express
 
 #from PIL import Image
 
@@ -28,4 +27,4 @@ st.area_chart(data)
 grafica=alt.Chart(data).mark_circle().enconde(x="POB_URBANA",y="QRESIDUOS_DOM")
 
 
-st.altair_chart(grafica)
+st.altair_chart(grafica,use_container_width=True)
