@@ -3,10 +3,7 @@ import streamlit as st
 import altair as alt
 import numpy as np
 
-import seaborn as sns
-import matplotlib.pyplot as plt
-fig = plt.figure(figsize=(10, 4))
-sns.countplot(x="class", data=titanic)
+
 
 st.pyplot(fig)
 
@@ -42,7 +39,3 @@ st.subheader('E')
 
 
 
-fig = plt.figure(figsize=(10, 4))
-sns.countplot(x="class", data=data)
-
-st.pyplot(fig)
