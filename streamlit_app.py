@@ -26,9 +26,6 @@ st.subheader('Gráfico')
 st.area_chart(data)
 st.subheader('E')
 
-%matplotlib inline
-import matplotlib.pyplot as plt
-import seaborn as sns
 
 
 
