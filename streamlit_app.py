@@ -1,5 +1,4 @@
 import pandas as pd
-import plotly.express as px
 import streamlit as st
 
 
@@ -22,26 +21,12 @@ tabla  = pd.read_csv('https://raw.githubusercontent.com/ronalth26/git-prueba/mas
                  )
 tabla 
 
+import matplotlib.pyplot as plt
+plt.figure(figsize=(10,10))
+plt.plot(tabla['POB_URBANA'],tabla['QRESIDUOS_DOM'],'.', color='green')
+plt.title('Generación de residuos domiciliarios para una población urbana')
+plt.xlabel('QRESIDUOS_DOM')
+plt.ylabel('POB_URBANA')
+plt.show()
 
 
-df = px.data.gapminder()
-
-fig = px.scatter(
-    df.query("year==2007"),
-    x="gdpPercap",
-    y="lifeExp",
-    size="pop",
-    color="continent",
-    hover_name="country",
-    log_x=True,
-    size_max=60,
-)
-
-tab1, tab2 = st.tabs(["Streamlit theme (default)", "Plotly native theme"])
-with tab1:
-    # Use the Streamlit theme.
-    # This is the default. So you can also omit the theme argument.
-    st.plotly_chart(fig, theme="streamlit", use_container_width=True)
-with tab2:
-    # Use the native Plotly theme.
-    st.plotly_chart(fig, theme=None, use_container_width=True)
