@@ -33,3 +33,24 @@ st.image("https://raw.githubusercontent.com/ronalth26/git-prueba/master/img.JPG"
 
 
 
+
+colores=['orange','blue']
+tamanios=[30,60]
+
+f1 = data['POB_URBANA'].values
+f2 = data['QRESIDUOS_DOM'].values
+
+# Vamos a pintar en colores los puntos por debajo y por encima de la media de Cantid\
+ ad de Palabras
+ asignar=[]
+
+
+plt.scatter(f1, f2, c=asignar, s=tamanios[0])
+plt.show()
+
+
+
+
+
+
+
