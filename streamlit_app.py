@@ -29,9 +29,13 @@ st.subheader('E')
 
 #opening the image
 
-from PIL import Image
+W = {'img':[misc.imread('img.jpg')]}
+df = pd.DataFrame(W)
 
-image = Image.open('img.jpg')
+# This displays the image
+plt.imshow(df.img1[0])
+plt.show()
+
 
 
 
