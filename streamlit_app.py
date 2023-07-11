@@ -3,9 +3,9 @@ import streamlit as st
 import altair as alt
 import numpy as np
 import matplotlib.pyplot as plt
-
 import pandas as pd
 
+import statsmodels.api as sm
 
 st.set_page_config(page_title="Datos Abiertos") # Nombre para configurar la pagina web
 st.header('Residuos municipalidades generados anualmente') #Va a ser el titulo de la pagina
