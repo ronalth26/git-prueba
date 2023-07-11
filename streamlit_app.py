@@ -5,7 +5,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 
-import statsmodels.api as sm
 
 st.set_page_config(page_title="Datos Abiertos") # Nombre para configurar la pagina web
 st.header('Residuos municipalidades generados anualmente') #Va a ser el titulo de la pagina
@@ -51,38 +50,5 @@ st.pyplot(fig)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-# Obtener los valores de X y Y
-X = data[['QRESIDUOS_DOM', 'POB_URBANA']]  # Reemplaza con los nombres de tus columnas reales
-y = data['ColumnaX']  # Reemplaza con el nombre de tu columna real
-
-# Entrenar el modelo de regresión lineal
-model = LinearRegression()
-model.fit(X, y)
-
-# Interfaz de usuario en Streamlit
-st.title('Predicción de X')
-st.write('Ingrese el valor de Y para predecir el valor de X')
-
-# Entrada de usuario para el valor de Y
-input_y = st.number_input('Valor de Y', min_value=0.0, max_value=100.0)
-
-# Predecir el valor de X
-input_X = [[input_y, input_y]]  # Utiliza los valores de Y ingresados para X1 y X2
-predicted_X = model.predict(input_X)
-
-# Mostrar el resultado de la predicción
-st.write(f'El valor de X predicho para Y={input_y} es: {predicted_X[0]}')
 
 
