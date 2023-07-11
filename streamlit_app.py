@@ -5,7 +5,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 import pandas as pd
-from sklearn.linear_model import LinearRegression
 
 
 st.set_page_config(page_title="Datos Abiertos") # Nombre para configurar la pagina web
