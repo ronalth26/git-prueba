@@ -45,6 +45,7 @@ st.pyplot(fig)
 
 
 
+st.subheader('El objetivo sería determinar si existe una relación lineal entre dos variables y predecir la generación de residuos domiciliarios para una población determinada.') 
 
 
 
