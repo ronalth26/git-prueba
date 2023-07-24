@@ -63,9 +63,8 @@ st.subheader('El objetivo sería determinar si existe una relación lineal entre
 #----------------------------------------------------------------------------------------------------------------------------------------------
 
 def load_data():
-    df_residuos = pd.read_csv('https://raw.githubusercontent.com/ronalth26/git-prueba/master/lista-residuos.csv',sep=';',encoding='iso-8859-1'
-                 )  # Reemplaza "dataset_residuos.csv" por la ruta a tu archivo CSV
-    return data
+    df_residuos = pd.read_csv('https://raw.githubusercontent.com/ronalth26/git-prueba/master/lista-residuos.csv', sep=';', encoding='iso-8859-1')
+    return df_residuos
 
 def preparar_datos(df):
     # Implementa aquí la función para el preprocesamiento y limpieza de datos si es necesario.
@@ -73,19 +72,13 @@ def preparar_datos(df):
 
     return df
 
+# Cargar los datos
+data = load_data()
+
 # Preprocesamiento y limpieza de datos
-df_residuos_cleaned = preparar_datos(df_residuos)
+df_residuos_cleaned = preparar_datos(data)
 
-# Separar las características (X) y las etiquetas (y)
-X = df_residuos_cleaned.drop(['QRESIDUOS_DOM'], axis=1).values
-y = df_residuos_cleaned['QRESIDUOS_DOM']
-
-# Escalar las características en un rango de 0 a 1
-scaler = MinMaxScaler()
-X = scaler.fit_transform(X)
-
-# Dividir el conjunto de datos en entrenamiento y prueba
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=123)
+# ... (el resto de tu código)
 
 # Entrenar el modelo de Regresión de Bosques Aleatorios
 model = RandomForestRegressor(max_depth=9, random_state=10)
@@ -100,7 +93,6 @@ r2_value = round(metrics.r2_score(y_test, y_pred), 5)
 # Guardar el modelo entrenado en un archivo .pkl
 with open("random_forest_model.pkl", "wb") as f:
     pickle.dump(model, f)
-
 
 
 #----------------------------------------------------------------------------------------------------------------------------------------------
