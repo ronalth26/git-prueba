@@ -65,34 +65,51 @@ def load_data():
     df_residuos = pd.read_csv('https://raw.githubusercontent.com/ronalth26/git-prueba/master/lista-residuos.csv', sep=';', encoding='iso-8859-1')
     return df_residuos
 
-def preparar_datos(df):
-    # Implementa aquí la función para el preprocesamiento y limpieza de datos si es necesario.
-    # Asegúrate de convertir las columnas relevantes a valores numéricos y eliminar filas con valores faltantes.
+# Entrenar el modelo de regresión polinómica
+def train_model(data):
+    X = data["POB_TOTAL"].values.reshape(-1, 1)
+    y = data["QRESIDUOS_DOM"].values
 
-    return df
+    poly_features = PolynomialFeatures(degree=2)
+    X_poly = poly_features.fit_transform(X)
 
-# Cargar los datos
-data = load_data()
+    model = LinearRegression()
+    model.fit(X_poly, y)
 
-# Preprocesamiento y limpieza de datos
-df_residuos_cleaned = preparar_datos(data)
+    return model, poly_features
 
-# ... (el resto de tu código)
+# Realizar la predicción
+def predict(model, poly_features, num_personas):
+    num_personas_poly = poly_features.transform([[num_personas]])
+    prediction = model.predict(num_personas_poly)
+    return prediction[0]
 
-# Entrenar el modelo de Regresión de Bosques Aleatorios
-model = RandomForestRegressor(max_depth=9, random_state=10)
-model.fit(X_train, y_train)
-y_pred = model.predict(X_test)
+def main():
+    st.title("Predicción de Residuos Domiciliarios por Región")
 
-# Evaluación del modelo
-mse = round(metrics.mean_squared_error(y_test, y_pred), 5)
-rmse = round(np.sqrt(mse), 3)
-r2_value = round(metrics.r2_score(y_test, y_pred), 5)
+    # Cargar el dataset y entrenar el modelo
+    data = load_data()
+    model, poly_features = train_model(data)
 
-# Guardar el modelo entrenado en un archivo .pkl
-with open("random_forest_model.pkl", "wb") as f:
-    pickle.dump(model, f)
+    # Obtener la lista de regiones únicas en el dataset
+    regiones = data["REG_NAT"].unique()
 
+    # Widget de selección de región
+    selected_region = st.selectbox("Seleccionar Región", regiones)
+
+    # Filtrar el dataset por la región seleccionada
+    data_filtered = data[data["REG_NAT"] == selected_region]
+
+    # Interfaz de usuario para ingresar el número de personas
+    num_personas = st.number_input("Ingrese el número de personas:", min_value=1, step=1)
+
+    # Realizar la predicción al presionar el botón
+    if st.button("Predecir"):
+        predicted_residuos = predict(model, poly_features, num_personas)
+        st.write(f"El aproximado total de residuos en toneladas al año para la región {selected_region} es: {predicted_residuos:.2f}")
+
+if __name__ == "__main__":
+    main()
 
 #----------------------------------------------------------------------------------------------------------------------------------------------
 
