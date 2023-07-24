@@ -64,7 +64,6 @@ def load_data():
 
 def preparar_datos(df):
     df = df.dropna(subset=['DEPARTAMENTO', 'POB_TOTAL', 'QRESIDUOS_DOM'])  # Eliminar filas con valores faltantes
-    df['QRESIDUOS_DOM'] = df['QRESIDUOS_DOM'].str.replace(',', '.').astype(float)  # Reemplazar ',' por '.' y convertir a float
     return df
 
 def train_model(data):
