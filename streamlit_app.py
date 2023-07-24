@@ -65,10 +65,11 @@ def load_data():
     df_residuos = pd.read_csv('https://raw.githubusercontent.com/ronalth26/git-prueba/master/lista-residuos.csv', sep=';', encoding='iso-8859-1')
     return df_residuos
 
-# Entrenar el modelo de regresión polinómica
-def train_model(data):
-    X = data["POB_TOTAL"].values.reshape(-1, 1)
-    y = data["QRESIDUOS_DOM"].values
+# Entrenar el modelo de regresión polinómica para un departamento específico
+def train_model(data, departamento):
+    data_filtered = data[data["DEPARTAMENTO"] == departamento]
+    X = data_filtered["POB_TOTAL"].values.reshape(-1, 1)
+    y = data_filtered["QRESIDUOS_DOM"].values
 
     # Filtrar filas con valores iguales a 0 en la columna QRESIDUOS_DOM
     mask_nonzero = y != 0
@@ -87,7 +88,7 @@ def train_model(data):
 
     return model, poly_features
 
-# Realizar la predicción
+# Realizar la predicción para un departamento específico
 def predict(model, poly_features, num_personas):
     num_personas_poly = poly_features.transform([[num_personas]])
     prediction_log = model.predict(num_personas_poly)
@@ -97,9 +98,8 @@ def predict(model, poly_features, num_personas):
 def main():
     st.title("Predicción de Residuos Domiciliarios por Departamento")
 
-    # Cargar el dataset y entrenar el modelo
+    # Cargar el dataset
     data = load_data()
-    model, poly_features = train_model(data)
 
     # Obtener la lista de departamentos únicos en el dataset
     departamentos = data["DEPARTAMENTO"].unique()
@@ -107,11 +107,8 @@ def main():
     # Widget de selección de departamento
     selected_departamento = st.selectbox("Seleccionar Departamento", departamentos)
 
-    # Filtrar el dataset por el departamento seleccionado
-    data_filtered = data[data["DEPARTAMENTO"] == selected_departamento]
-
-    # Imprimir el DataFrame filtrado para verificar
-    st.write(data_filtered)
+    # Entrenar el modelo y obtener las características (poly_features) para el departamento seleccionado
+    model, poly_features = train_model(data, selected_departamento)
 
     # Interfaz de usuario para ingresar el número de personas
     num_personas = st.number_input("Ingrese el número de personas:", min_value=1, step=1)
