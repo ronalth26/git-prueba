@@ -110,6 +110,9 @@ def main():
     # Filtrar el dataset por el departamento seleccionado
     data_filtered = data[data["DEPARTAMENTO"] == selected_departamento]
 
+    # Imprimir el DataFrame filtrado para verificar
+    st.write(data_filtered)
+
     # Interfaz de usuario para ingresar el número de personas
     num_personas = st.number_input("Ingrese el número de personas:", min_value=1, step=1)
 
