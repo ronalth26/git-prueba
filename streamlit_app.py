@@ -51,8 +51,8 @@ def load_data():
     return data
 
 def train_model(data):
-    X = data.drop("DEPARTAMENTO", axis=1)  # Reemplaza "target_column" por el nombre de la columna objetivo
-    y = data["DEPARTAMENTO"]
+    X = data.drop("POB_URBANA", axis=1)  # Reemplaza "target_column" por el nombre de la columna objetivo
+    y = data["POB_URBANA"]
 
     # Entrena tu modelo aquí
     model = RandomForestClassifier()  # Cambia por el modelo que desees usar
@@ -81,7 +81,7 @@ def main():
     st.header("Ingresar características para la predicción")
     input_data = {}
     for column in data.columns:
-        if column != "DEPARTAMENTO" and column != selected_column:  # Excluye la columna objetivo y la columna seleccionada
+        if column != "POB_URBANA" and column != selected_column:  # Excluye la columna objetivo y la columna seleccionada
             input_data[column] = st.number_input(f"Ingresar {column}", value=0)
 
     # Convierte las características ingresadas en un DataFrame
