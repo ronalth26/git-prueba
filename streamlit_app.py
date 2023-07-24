@@ -52,8 +52,8 @@ def load_data():
 
 # Entrenar el modelo de regresión
 def train_model(data):
-    X = data["NumeroDePersonas"].values.reshape(-1, 1)
-    y = data["TotalResiduos"].values
+    X = data["POB_TOTAL"].values.reshape(-1, 1)
+    y = data["QRESIDUOS_DOM"].values
 
     model = LinearRegression()
     model.fit(X, y)
@@ -78,7 +78,7 @@ def main():
     # Realizar la predicción al presionar el botón
     if st.button("Predecir"):
         predicted_residuos = predict(model, num_personas)
-        st.write(f"El aproximado total de residuos al año es: {predicted_residuos:.2f} toneladas")
+        st.write(f"El aproximado total de residuos en toneladas al año es: {predicted_residuos:.2f}")
 
 if __name__ == "__main__":
     main()
