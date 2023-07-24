@@ -63,9 +63,8 @@ def load_data():
     return df_residuos
 
 def preparar_datos(df):
-    # Implementa aquí la función para el preprocesamiento y limpieza de datos si es necesario.
-    # Asegúrate de convertir las columnas relevantes a valores numéricos y eliminar filas con valores faltantes.
     df = df.dropna(subset=['DEPARTAMENTO', 'POB_TOTAL', 'QRESIDUOS_DOM'])  # Eliminar filas con valores faltantes
+    df['QRESIDUOS_DOM'] = df['QRESIDUOS_DOM'].str.replace(',', '.').astype(float)  # Reemplazar ',' por '.' y convertir a float
     return df
 
 def train_model(data):
@@ -83,7 +82,7 @@ def train_model(data):
 def predict(model, poly_features, num_personas):
     num_personas_poly = poly_features.transform([[num_personas]])
     prediction = model.predict(num_personas_poly)
-    return prediction[0]
+    return max(prediction[0], 0)  # Asegurar que la predicción no sea menor a cero
 
 def main():
     st.title("Predicción de Residuos Domiciliarios por Departamento")
@@ -130,7 +129,7 @@ def main():
     X_test_poly = poly_features.transform(X_test)
     y_pred = model.predict(X_test_poly)
     df_comparacion = pd.DataFrame({"Valor": ["Real", "Predicho"],
-                                   "Cantidad de Residuos (toneladas)": [y_real.mean(), y_pred[0]]})
+                                   "Cantidad de Residuos (toneladas)": [y_real.mean(), max(y_pred[0], 0)]})
 
     bar_plot = alt.Chart(df_comparacion).mark_bar().encode(
         x="Valor",
