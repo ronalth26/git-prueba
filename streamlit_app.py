@@ -51,35 +51,42 @@ def load_data():
                  )  # Reemplaza "dataset.csv" por la ruta a tu archivo CSV
     return data
 
-# Filtrar el dataset por la región seleccionada
-def filter_data_by_region(data, selected_region):
-    filtered_data = data[data["DEPARTAMENTO"] == selected_region]
-    return filtered_data
+# Aplicar una transformación logarítmica a los datos
+def apply_log_transform(data):
+    data["POB_TOTAL"] = np.log(data["POB_TOTAL"])
+    data["QRESIDUOS_DOM"] = np.log(data["QRESIDUOS_DOM"])
+    return data
 
-# Entrenar el modelo de regresión
+# Entrenar el modelo de regresión polinómica
 def train_model(data):
     X = data["POB_TOTAL"].values.reshape(-1, 1)
     y = data["QRESIDUOS_DOM"].values
 
+    poly_features = PolynomialFeatures(degree=2)
+    X_poly = poly_features.fit_transform(X)
+
     model = LinearRegression()
-    model.fit(X, y)
+    model.fit(X_poly, y)
 
     return model
 
 # Realizar la predicción
 def predict(model, num_personas):
-    prediction = model.predict([[num_personas]])
-    return prediction[0]
+    num_personas_log = np.log(num_personas)
+    num_personas_log_poly = poly_features.transform([[num_personas_log]])
+    prediction = model.predict(num_personas_log_poly)
+    return np.exp(prediction)[0]
 
 def main():
     st.title("Predicción de Residuos Domiciliarios por Región")
 
     # Cargar el dataset y entrenar el modelo
     data = load_data()
+    data = apply_log_transform(data)
     model = train_model(data)
 
     # Obtener la lista de regiones únicas en el dataset
-    regiones = data["DEPARTAMENTO"].unique()
+    regiones = data["REG_NAT"].unique()
 
     # Widget de selección de región
     selected_region = st.selectbox("Seleccionar Región", regiones)
