@@ -4,6 +4,7 @@ import altair as alt
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
+from sklearn.ensemble import RandomForestClassifier
 
 st.set_page_config(page_title="Datos Abiertos") # Nombre para configurar la pagina web
 st.header('Residuos municipalidades generados anualmente') #Va a ser el titulo de la pagina
@@ -43,9 +44,6 @@ st.subheader('El objetivo sería determinar si existe una relación lineal entre
 
 #prueba#
 #----------------------------------------------------------------------------------------------------------------------------------------------
-
-
-
 
 
 
