@@ -52,12 +52,6 @@ def load_data():
                  )  # Reemplaza "dataset.csv" por la ruta a tu archivo CSV
     return data
 
-# Aplicar una transformación logarítmica a los datos
-def apply_log_transform(data):
-    data["POB_TOTAL"] = np.log(data["POB_TOTAL"])
-    data["QRESIDUOS_DOM"] = np.log(data["QRESIDUOS_DOM"])
-    return data
-
 # Entrenar el modelo de regresión polinómica
 def train_model(data):
     X = data["POB_TOTAL"].values.reshape(-1, 1)
@@ -69,22 +63,20 @@ def train_model(data):
     model = LinearRegression()
     model.fit(X_poly, y)
 
-    return model, poly_features  # También retornamos poly_features
+    return model, poly_features
 
 # Realizar la predicción
 def predict(model, poly_features, num_personas):
-    num_personas_log = np.log(num_personas)
-    num_personas_log_poly = poly_features.transform([[num_personas_log]])
-    prediction = model.predict(num_personas_log_poly)
-    return np.exp(prediction)[0]
+    num_personas_poly = poly_features.transform([[num_personas]])
+    prediction = model.predict(num_personas_poly)
+    return prediction[0]
 
 def main():
     st.title("Predicción de Residuos Domiciliarios por Región")
 
     # Cargar el dataset y entrenar el modelo
     data = load_data()
-    data = apply_log_transform(data)
-    model, poly_features = train_model(data)  # También obtenemos poly_features
+    model, poly_features = train_model(data)
 
     # Obtener la lista de regiones únicas en el dataset
     regiones = data["REG_NAT"].unique()
@@ -93,14 +85,14 @@ def main():
     selected_region = st.selectbox("Seleccionar Región", regiones)
 
     # Filtrar el dataset por la región seleccionada
-    data_filtered = filter_data_by_region(data, selected_region)
+    data_filtered = data[data["REG_NAT"] == selected_region]
 
     # Interfaz de usuario para ingresar el número de personas
     num_personas = st.number_input("Ingrese el número de personas:", min_value=1, step=1)
 
     # Realizar la predicción al presionar el botón
     if st.button("Predecir"):
-        predicted_residuos = predict(model, poly_features, num_personas)  # Pasamos poly_features como argumento
+        predicted_residuos = predict(model, poly_features, num_personas)
         st.write(f"El aproximado total de residuos en toneladas al año para la región {selected_region} es: {predicted_residuos:.2f}")
 
 if __name__ == "__main__":
