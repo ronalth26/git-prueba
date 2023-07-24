@@ -69,10 +69,10 @@ def train_model(data):
     model = LinearRegression()
     model.fit(X_poly, y)
 
-    return model
+    return model, poly_features  # También retornamos poly_features
 
 # Realizar la predicción
-def predict(model, num_personas):
+def predict(model, poly_features, num_personas):
     num_personas_log = np.log(num_personas)
     num_personas_log_poly = poly_features.transform([[num_personas_log]])
     prediction = model.predict(num_personas_log_poly)
@@ -84,7 +84,7 @@ def main():
     # Cargar el dataset y entrenar el modelo
     data = load_data()
     data = apply_log_transform(data)
-    model = train_model(data)
+    model, poly_features = train_model(data)  # También obtenemos poly_features
 
     # Obtener la lista de regiones únicas en el dataset
     regiones = data["REG_NAT"].unique()
@@ -100,7 +100,7 @@ def main():
 
     # Realizar la predicción al presionar el botón
     if st.button("Predecir"):
-        predicted_residuos = predict(model, num_personas)
+        predicted_residuos = predict(model, poly_features, num_personas)  # Pasamos poly_features como argumento
         st.write(f"El aproximado total de residuos en toneladas al año para la región {selected_region} es: {predicted_residuos:.2f}")
 
 if __name__ == "__main__":
