@@ -131,24 +131,7 @@ def main():
         data_filtered = data[data["DEPARTAMENTO"] == selected_departamento]
         mean_residuos = data_filtered["QRESIDUOS_DOM"].mean()
 
-        # Crear un DataFrame para la predicción de todos los departamentos
-        df_pred_all = pd.DataFrame()
-
-        for departamento in departamentos:
-            model_dep, _ = train_model(data, departamento)
-            prediction = predict(model_dep, poly_features, num_personas)
-            df_pred_all = df_pred_all.append({'Departamento': departamento, 'Residuos (toneladas)': prediction}, ignore_index=True)
-
-        # Crear el gráfico de barras con Altair para la predicción de todos los departamentos
-        chart_all = alt.Chart(df_pred_all).mark_bar().encode(
-            x='Departamento',
-            y='Residuos (toneladas)'
-        )
-
-        # Mostrar el gráfico de barras en Streamlit para la predicción de todos los departamentos
-        st.altair_chart(chart_all)
-
-        # Mostrar el resultado de la predicción para el departamento seleccionado y el valor promedio de residuos
+        # Mostrar el resultado de la predicción y el valor promedio de residuos
         st.write(f"El aproximado total de residuos en toneladas al año para el departamento {selected_departamento} es: {predicted_residuos:.2f} toneladas.")
         st.write(f"El valor promedio de residuos en toneladas para el departamento {selected_departamento} es: {mean_residuos:.2f} toneladas.")
 
