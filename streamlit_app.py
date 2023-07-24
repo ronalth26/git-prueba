@@ -5,21 +5,18 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.linear_model import LinearRegression
-from sklearn.ensemble import RandomForestClassifier
-import statsmodels.api as sm
-
-
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.model_selection import train_test_split
+from sklearn import metrics
 import seaborn as sns
 import re
 import warnings
+import pickle
+import statsmodels.api as sm
+
 warnings.filterwarnings('ignore')
 sns.set_style('whitegrid')
-import pickle
-
-from sklearn.preprocessing import MinMaxScaler
-from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestRegressor
-from sklearn import metrics
 
 
 st.set_page_config(page_title="Datos Abiertos") # Nombre para configurar la pagina web
