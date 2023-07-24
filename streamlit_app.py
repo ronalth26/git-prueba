@@ -65,58 +65,83 @@ def load_data():
     df_residuos = pd.read_csv('https://raw.githubusercontent.com/ronalth26/git-prueba/master/lista-residuos.csv', sep=';', encoding='iso-8859-1')
     return df_residuos
 
-# Entrenar el modelo de regresión polinómica para un departamento específico
-def train_model(data, departamento):
-    data_filtered = data[data["DEPARTAMENTO"] == departamento]
-    X = data_filtered["POB_TOTAL"].values.reshape(-1, 1)
-    y = data_filtered["QRESIDUOS_DOM"].values
+def preparar_datos(df):
+    # Implementa aquí la función para el preprocesamiento y limpieza de datos si es necesario.
+    # Asegúrate de convertir las columnas relevantes a valores numéricos y eliminar filas con valores faltantes.
+    df['QRESIDUOS_DOM'] = df['QRESIDUOS_DOM'].str.replace(',', '.').astype(float)  # Reemplazar ',' por '.' y convertir a float
+    df = df.dropna(subset=['DEPARTAMENTO', 'POB_TOTAL', 'QRESIDUOS_DOM'])  # Eliminar filas con valores faltantes
+    return df
 
-    # Filtrar filas con valores iguales a 0 en la columna QRESIDUOS_DOM
-    mask_nonzero = y != 0
-    X = X[mask_nonzero]
-    y = y[mask_nonzero]
-
-    # Aplicar log shift (sumar epsilon) para evitar logaritmo de valores iguales a 0
-    epsilon = 1e-10
-    y_log = np.log(y + epsilon)
+def train_model(data):
+    X = data["POB_TOTAL"].values.reshape(-1, 1)
+    y = data["QRESIDUOS_DOM"].values
 
     poly_features = PolynomialFeatures(degree=2)
     X_poly = poly_features.fit_transform(X)
 
     model = LinearRegression()
-    model.fit(X_poly, y_log)
+    model.fit(X_poly, y)
 
     return model, poly_features
 
-# Realizar la predicción para un departamento específico
 def predict(model, poly_features, num_personas):
     num_personas_poly = poly_features.transform([[num_personas]])
-    prediction_log = model.predict(num_personas_poly)
-    prediction = np.exp(prediction_log)
+    prediction = model.predict(num_personas_poly)
     return prediction[0]
 
 def main():
     st.title("Predicción de Residuos Domiciliarios por Departamento")
 
-    # Cargar el dataset
+    # Cargar el dataset y entrenar el modelo
     data = load_data()
+    df_residuos_cleaned = preparar_datos(data)
+    model, poly_features = train_model(df_residuos_cleaned)
 
     # Obtener la lista de departamentos únicos en el dataset
-    departamentos = data["DEPARTAMENTO"].unique()
+    departamentos = df_residuos_cleaned["DEPARTAMENTO"].unique()
 
     # Widget de selección de departamento
     selected_departamento = st.selectbox("Seleccionar Departamento", departamentos)
 
-    # Entrenar el modelo y obtener las características (poly_features) para el departamento seleccionado
-    model, poly_features = train_model(data, selected_departamento)
+    # Filtrar el dataset por el departamento seleccionado
+    data_filtered = df_residuos_cleaned[df_residuos_cleaned["DEPARTAMENTO"] == selected_departamento]
 
     # Interfaz de usuario para ingresar el número de personas
-    num_personas = st.number_input("Ingrese el número de personas POB_URBANA:", min_value=1, step=1)
+    num_personas = st.number_input("Ingrese el número de personas:", min_value=1, step=1)
 
     # Realizar la predicción al presionar el botón
     if st.button("Predecir"):
         predicted_residuos = predict(model, poly_features, num_personas)
-        st.write(f"El aproximado total de residuos en toneladas al año para el departamento {selected_departamento} es: {predicted_residuos:.2f}")
+        st.write(f"El aproximado total de residuos en toneladas al año para el departamento {selected_departamento} es: {predicted_residuos:.2f} toneladas")
+
+    # Gráfico de dispersión interactivo
+    st.subheader("Gráfico de Dispersión: Número de Personas vs Cantidad de Residuos")
+    scatter_plot = alt.Chart(data_filtered).mark_circle(size=60).encode(
+        x=alt.X("POB_TOTAL", title="Número de Personas"),
+        y=alt.Y("QRESIDUOS_DOM", title="Cantidad de Residuos (toneladas)"),
+        tooltip=["POB_TOTAL", "QRESIDUOS_DOM"]
+    ).properties(
+        width=600,
+        height=400
+    ).interactive()
+
+    st.altair_chart(scatter_plot)
+
+    # Gráfico de barras para comparar valor real y valor predicho
+    st.subheader("Comparación entre Valor Real y Valor Predicho")
+    y_real = data_filtered["QRESIDUOS_DOM"].values
+    X_test = np.array([num_personas]).reshape(-1, 1)
+    X_test_poly = poly_features.transform(X_test)
+    y_pred = model.predict(X_test_poly)
+    df_comparacion = pd.DataFrame({"Valor": ["Real", "Predicho"],
+                                   "Cantidad de Residuos (toneladas)": [y_real.mean(), y_pred[0]]})
+
+    bar_plot = alt.Chart(df_comparacion).mark_bar().encode(
+        x="Valor",
+        y="Cantidad de Residuos (toneladas)"
+    )
+
+    st.altair_chart(bar_plot)
 
 if __name__ == "__main__":
     main()
