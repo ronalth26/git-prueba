@@ -50,47 +50,35 @@ def load_data():
                  )  # Reemplaza "dataset.csv" por la ruta a tu archivo CSV
     return data
 
+# Entrenar el modelo de regresión
 def train_model(data):
-    X = data.drop("POB_URBANA", axis=1)  # Reemplaza "target_column" por el nombre de la columna objetivo
-    y = data["POB_URBANA"]
+    X = data["NumeroDePersonas"].values.reshape(-1, 1)
+    y = data["TotalResiduos"].values
 
-    # Entrena tu modelo aquí
-    model = RandomForestClassifier()  # Cambia por el modelo que desees usar
+    model = LinearRegression()
     model.fit(X, y)
 
     return model
 
-def predict(model, input_data):
-    # Realiza la predicción usando el modelo
-    prediction = model.predict(input_data)
-    return prediction
+# Realizar la predicción
+def predict(model, num_personas):
+    prediction = model.predict([[num_personas]])
+    return prediction[0]
 
 def main():
-    st.title("Aplicación de Predicción")
+    st.title("Predicción de Residuos Domiciliarios")
 
-    # Carga el dataset
+    # Cargar el dataset y entrenar el modelo
     data = load_data()
-
-    # Entrena el modelo
     model = train_model(data)
 
-    # Widget de selección con opciones de una columna del dataset
-    selected_column = st.selectbox("Seleccionar columna", data.columns)
+    # Interfaz de usuario para ingresar el número de personas
+    num_personas = st.number_input("Ingrese el número de personas:", min_value=1, step=1)
 
-    # Interfaz de usuario para ingresar las características (features) y obtener la predicción
-    st.header("Ingresar características para la predicción")
-    input_data = {}
-    for column in data.columns:
-        if column != "POB_URBANA" and column != selected_column:  # Excluye la columna objetivo y la columna seleccionada
-            input_data[column] = st.number_input(f"Ingresar {column}", value=0)
-
-    # Convierte las características ingresadas en un DataFrame
-    input_df = pd.DataFrame([input_data])
-
-    # Realiza la predicción
+    # Realizar la predicción al presionar el botón
     if st.button("Predecir"):
-        prediction = predict(model, input_df)
-        st.write(f"La predicción es: {prediction[0]}")
+        predicted_residuos = predict(model, num_personas)
+        st.write(f"El aproximado total de residuos al año es: {predicted_residuos:.2f} toneladas")
 
 if __name__ == "__main__":
     main()
