@@ -62,9 +62,10 @@ st.subheader('El objetivo sería determinar si existe una relación lineal entre
 #prueba#
 #----------------------------------------------------------------------------------------------------------------------------------------------
 
-# Cargar el dataset
-df_residuos = pd.read_csv('https://raw.githubusercontent.com/ronalth26/git-prueba/master/lista-residuos.csv',sep=';',encoding='iso-8859-1'
-                 )
+def load_data():
+    df_residuos = pd.read_csv('https://raw.githubusercontent.com/ronalth26/git-prueba/master/lista-residuos.csv',sep=';',encoding='iso-8859-1'
+                 )  # Reemplaza "dataset_residuos.csv" por la ruta a tu archivo CSV
+    return data
 
 def preparar_datos(df):
     # Implementa aquí la función para el preprocesamiento y limpieza de datos si es necesario.
