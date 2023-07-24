@@ -7,6 +7,8 @@ import pandas as pd
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestClassifier
+import statsmodels.api as sm
+
 
 st.set_page_config(page_title="Datos Abiertos") # Nombre para configurar la pagina web
 st.header('Residuos municipalidades generados anualmente') #Va a ser el titulo de la pagina
@@ -52,23 +54,22 @@ def load_data():
                  )  # Reemplaza "dataset.csv" por la ruta a tu archivo CSV
     return data
 
-# Entrenar el modelo de regresión polinómica
+# Entrenar el modelo de regresión gamma generalizado
 def train_model(data):
-    X = data["POB_TOTAL"].values.reshape(-1, 1)
+    X = data["POB_TOTAL"].values
     y = data["QRESIDUOS_DOM"].values
 
-    poly_features = PolynomialFeatures(degree=2)
-    X_poly = poly_features.fit_transform(X)
+    X_poly = PolynomialFeatures(degree=2).fit_transform(X)
 
-    model = LinearRegression()
-    model.fit(X_poly, y)
+    model = sm.GLM(y, X_poly, family=sm.families.Gamma())
+    result = model.fit()
 
-    return model, poly_features
+    return result
 
 # Realizar la predicción
-def predict(model, poly_features, num_personas):
-    num_personas_poly = poly_features.transform([[num_personas]])
-    prediction = model.predict(num_personas_poly)
+def predict(result, num_personas):
+    num_personas_poly = PolynomialFeatures(degree=2).fit_transform([[num_personas]])
+    prediction = result.predict(num_personas_poly)
     return prediction[0]
 
 def main():
@@ -76,7 +77,7 @@ def main():
 
     # Cargar el dataset y entrenar el modelo
     data = load_data()
-    model, poly_features = train_model(data)
+    result = train_model(data)
 
     # Obtener la lista de regiones únicas en el dataset
     regiones = data["REG_NAT"].unique()
@@ -92,7 +93,7 @@ def main():
 
     # Realizar la predicción al presionar el botón
     if st.button("Predecir"):
-        predicted_residuos = predict(model, poly_features, num_personas)
+        predicted_residuos = predict(result, num_personas)
         st.write(f"El aproximado total de residuos en toneladas al año para la región {selected_region} es: {predicted_residuos:.2f}")
 
 if __name__ == "__main__":
