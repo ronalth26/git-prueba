@@ -132,7 +132,8 @@ def main():
         mean_residuos = data_filtered["QRESIDUOS_DOM"].mean()
 
         # Crear un DataFrame para la predicción de todos los departamentos
-        df_pred_all = pd.DataFrame(columns=['Departamento', 'Residuos (toneladas)'])
+        df_pred_all = pd.DataFrame()
+
         for departamento in departamentos:
             model_dep, _ = train_model(data, departamento)
             prediction = predict(model_dep, poly_features, num_personas)
