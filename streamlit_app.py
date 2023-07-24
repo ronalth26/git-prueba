@@ -66,54 +66,48 @@ def preparar_datos(df):
     df = df.dropna(subset=['DEPARTAMENTO', 'POB_TOTAL', 'QRESIDUOS_DOM'])  # Eliminar filas con valores faltantes
     return df
 
-def train_model(data):
-    X = data["POB_TOTAL"].values.reshape(-1, 1)
-    y = data["QRESIDUOS_DOM"].values
+def train_model(data, departamento):
+    data_filtered = data[data["DEPARTAMENTO"] == departamento]
+    X = data_filtered["POB_TOTAL"].values.reshape(-1, 1)
+    y = data_filtered["QRESIDUOS_DOM"].values
+
+    mask_nonzero = y != 0
+    X = X[mask_nonzero]
+    y = y[mask_nonzero]
+
+    epsilon = 1e-10
+    y_log = np.log(y + epsilon)
 
     poly_features = PolynomialFeatures(degree=2)
     X_poly = poly_features.fit_transform(X)
 
     model = LinearRegression()
-    model.fit(X_poly, y)
+    model.fit(X_poly, y_log)
 
     return model, poly_features
 
-def predict(model, poly_features, scaler, num_personas):
-    num_personas_scaled = scaler.transform(np.array([num_personas]).reshape(-1, 1))
-    num_personas_poly = poly_features.transform(num_personas_scaled)
-    prediction = model.predict(num_personas_poly)
-    return max(prediction[0], 0)  # Asegurar que la predicción no sea menor a cero
+def predict(model, poly_features, num_personas):
+    num_personas_poly = poly_features.transform([[num_personas]])
+    prediction_log = model.predict(num_personas_poly)
+    prediction = np.exp(prediction_log)
+    return prediction[0]
 
 def main():
     st.title("Predicción de Residuos Domiciliarios por Departamento")
 
-    # Cargar el dataset y entrenar el modelo
     data = load_data()
-    df_residuos_cleaned = preparar_datos(data)
-    model, poly_features = train_model(df_residuos_cleaned)
 
-    # Ajustar la escala de los datos
-    scaler = MinMaxScaler()
-    X = df_residuos_cleaned["POB_TOTAL"].values.reshape(-1, 1)
-    scaler.fit(X)
+    departamentos = data["DEPARTAMENTO"].unique()
 
-    # Obtener la lista de departamentos únicos en el dataset
-    departamentos = df_residuos_cleaned["DEPARTAMENTO"].unique()
-
-    # Widget de selección de departamento
     selected_departamento = st.selectbox("Seleccionar Departamento", departamentos)
 
-    # Filtrar el dataset por el departamento seleccionado
-    data_filtered = df_residuos_cleaned[df_residuos_cleaned["DEPARTAMENTO"] == selected_departamento]
+    model, poly_features = train_model(data, selected_departamento)
 
-    # Interfaz de usuario para ingresar el número de personas
-    num_personas = st.number_input("Ingrese el número de personas:", min_value=float(data_filtered["POB_TOTAL"].min()), 
-                                   max_value=float(data_filtered["POB_TOTAL"].max()), step=1.0)
+    num_personas = st.number_input("Ingrese el número de personas POB_URBANA:", min_value=1, step=1)
 
-    # Realizar la predicción al presionar el botón
     if st.button("Predecir"):
-        predicted_residuos = predict(model, poly_features, scaler, num_personas)
-        st.write(f"El aproximado total de residuos en toneladas al año para el departamento {selected_departamento} es: {predicted_residuos:.2f} toneladas")
+        predicted_residuos = predict(model, poly_features, num_personas)
+        st.write(f"El aproximado total de residuos en toneladas al año para el departamento {selected_departamento} es: {predicted_residuos:.2f}")
 
 if __name__ == "__main__":
     main()
