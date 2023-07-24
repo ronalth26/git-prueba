@@ -127,6 +127,10 @@ def main():
         # Realizar la predicción para el departamento seleccionado y el número de personas ingresado
         predicted_residuos = predict(model, poly_features, num_personas)
 
+        # Calcular el valor promedio de residuos para el departamento seleccionado
+        data_filtered = data[data["DEPARTAMENTO"] == selected_departamento]
+        mean_residuos = data_filtered["QRESIDUOS_DOM"].mean()
+
         # Crear un DataFrame para la predicción de todos los departamentos
         df_pred_all = pd.DataFrame(columns=['Departamento', 'Residuos (toneladas)'])
         for departamento in departamentos:
