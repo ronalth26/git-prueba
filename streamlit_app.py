@@ -107,42 +107,13 @@ def main():
     data_filtered = df_residuos_cleaned[df_residuos_cleaned["DEPARTAMENTO"] == selected_departamento]
 
     # Interfaz de usuario para ingresar el número de personas
-    num_personas = st.number_input("Ingrese el número de personas:", min_value=1, step=1)
+    num_personas = st.number_input("Ingrese el número de personas:", min_value=float(data_filtered["POB_TOTAL"].min()), 
+                                   max_value=float(data_filtered["POB_TOTAL"].max()), step=1.0)
 
     # Realizar la predicción al presionar el botón
     if st.button("Predecir"):
         predicted_residuos = predict(model, poly_features, scaler, num_personas)
         st.write(f"El aproximado total de residuos en toneladas al año para el departamento {selected_departamento} es: {predicted_residuos:.2f} toneladas")
-
-    # Gráfico de dispersión interactivo
-    st.subheader("Gráfico de Dispersión: Número de Personas vs Cantidad de Residuos")
-    scatter_plot = alt.Chart(data_filtered).mark_circle(size=60).encode(
-        x=alt.X("POB_TOTAL", title="Número de Personas"),
-        y=alt.Y("QRESIDUOS_DOM", title="Cantidad de Residuos (toneladas)"),
-        tooltip=["POB_TOTAL", "QRESIDUOS_DOM"]
-    ).properties(
-        width=600,
-        height=400
-    ).interactive()
-
-    st.altair_chart(scatter_plot)
-
-    # Gráfico de barras para comparar valor real y valor predicho
-    st.subheader("Comparación entre Valor Real y Valor Predicho")
-    y_real = data_filtered["QRESIDUOS_DOM"].values
-    X_test = np.array([num_personas]).reshape(-1, 1)
-    X_test_scaled = scaler.transform(X_test)
-    X_test_poly = poly_features.transform(X_test_scaled)
-    y_pred = model.predict(X_test_poly)
-    df_comparacion = pd.DataFrame({"Valor": ["Real", "Predicho"],
-                                   "Cantidad de Residuos (toneladas)": [y_real.mean(), max(y_pred[0], 0)]})
-
-    bar_plot = alt.Chart(df_comparacion).mark_bar().encode(
-        x="Valor",
-        y="Cantidad de Residuos (toneladas)"
-    )
-
-    st.altair_chart(bar_plot)
 
 if __name__ == "__main__":
     main()
