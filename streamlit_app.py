@@ -70,8 +70,14 @@ def train_model(data):
     X = data["POB_TOTAL"].values.reshape(-1, 1)
     y = data["QRESIDUOS_DOM"].values
 
-    # Aplicar una transformación logarítmica a y
-    y_log = np.log(y)
+    # Filtrar filas con valores iguales a 0 en la columna QRESIDUOS_DOM
+    mask_nonzero = y != 0
+    X = X[mask_nonzero]
+    y = y[mask_nonzero]
+
+    # Aplicar log shift (sumar epsilon) para evitar logaritmo de valores iguales a 0
+    epsilon = 1e-10
+    y_log = np.log(y + epsilon)
 
     poly_features = PolynomialFeatures(degree=2)
     X_poly = poly_features.fit_transform(X)
