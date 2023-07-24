@@ -10,6 +10,19 @@ from sklearn.ensemble import RandomForestClassifier
 import statsmodels.api as sm
 
 
+import seaborn as sns
+import re
+import warnings
+warnings.filterwarnings('ignore')
+sns.set_style('whitegrid')
+import pickle
+
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestRegressor
+from sklearn import metrics
+
+
 st.set_page_config(page_title="Datos Abiertos") # Nombre para configurar la pagina web
 st.header('Residuos municipalidades generados anualmente') #Va a ser el titulo de la pagina
 st.subheader('La GPC de residuos domiciliarios es un dato obtenido de los estudios de caracterización elaborados por las municipalidades provinciales y distritales y se refiere a la generación de residuos sólidos por persona-día.') #Subtitulo
@@ -49,58 +62,43 @@ st.subheader('El objetivo sería determinar si existe una relación lineal entre
 #prueba#
 #----------------------------------------------------------------------------------------------------------------------------------------------
 
-def load_data():
-    data = pd.read_csv('https://raw.githubusercontent.com/ronalth26/git-prueba/master/lista-residuos.csv',sep=';',encoding='iso-8859-1'
-                 )  # Reemplaza "dataset.csv" por la ruta a tu archivo CSV
-    return data
+# Cargar el dataset
+df_residuos = pd.read_csv('https://raw.githubusercontent.com/ronalth26/git-prueba/master/lista-residuos.csv',sep=';',encoding='iso-8859-1'
+                 )
 
-# Entrenar el modelo de regresión polinómica
-def train_model(data):
-    X = data["POB_TOTAL"].values.reshape(-1, 1)
-    y = data["QRESIDUOS_DOM"].values
+def preparar_datos(df):
+    # Implementa aquí la función para el preprocesamiento y limpieza de datos si es necesario.
+    # Asegúrate de convertir las columnas relevantes a valores numéricos y eliminar filas con valores faltantes.
 
-    poly_features = PolynomialFeatures(degree=2)
-    X_poly = poly_features.fit_transform(X)
+    return df
 
-    model = LinearRegression()
-    model.fit(X_poly, y)
+# Preprocesamiento y limpieza de datos
+df_residuos_cleaned = preparar_datos(df_residuos)
 
-    return model, poly_features
+# Separar las características (X) y las etiquetas (y)
+X = df_residuos_cleaned.drop(['QRESIDUOS_DOM'], axis=1).values
+y = df_residuos_cleaned['QRESIDUOS_DOM']
 
-# Realizar la predicción
-def predict(model, poly_features, num_personas):
-    num_personas_poly = poly_features.transform([[num_personas]])
-    prediction = model.predict(num_personas_poly)
-    return prediction[0]
+# Escalar las características en un rango de 0 a 1
+scaler = MinMaxScaler()
+X = scaler.fit_transform(X)
 
-def main():
-    st.title("Predicción de Residuos Domiciliarios por Región")
+# Dividir el conjunto de datos en entrenamiento y prueba
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=123)
 
-    # Cargar el dataset y entrenar el modelo
-    data = load_data()
-    model, poly_features = train_model(data)
+# Entrenar el modelo de Regresión de Bosques Aleatorios
+model = RandomForestRegressor(max_depth=9, random_state=10)
+model.fit(X_train, y_train)
+y_pred = model.predict(X_test)
 
-    # Obtener la lista de regiones únicas en el dataset
-    regiones = data["REG_NAT"].unique()
+# Evaluación del modelo
+mse = round(metrics.mean_squared_error(y_test, y_pred), 5)
+rmse = round(np.sqrt(mse), 3)
+r2_value = round(metrics.r2_score(y_test, y_pred), 5)
 
-    # Widget de selección de región
-    selected_region = st.selectbox("Seleccionar Región", regiones)
-
-    # Filtrar el dataset por la región seleccionada
-    data_filtered = data[data["REG_NAT"] == selected_region]
-
-    # Interfaz de usuario para ingresar el número de personas
-    num_personas = st.number_input("Ingrese el número de personas:", min_value=1, step=1)
-
-    # Realizar la predicción al presionar el botón
-    if st.button("Predecir"):
-        predicted_residuos = predict(model, poly_features, num_personas)
-        st.write(f"El aproximado total de residuos en toneladas al año para la región {selected_region} es: {predicted_residuos:.2f}")
-
-if __name__ == "__main__":
-    main()
-
-
+# Guardar el modelo entrenado en un archivo .pkl
+with open("random_forest_model.pkl", "wb") as f:
+    pickle.dump(model, f)
 
 
 
