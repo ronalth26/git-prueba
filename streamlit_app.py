@@ -111,7 +111,7 @@ def main():
     model, poly_features = train_model(data, selected_departamento)
 
     # Interfaz de usuario para ingresar el número de personas
-    num_personas = st.number_input("Ingrese el número de personas:", min_value=1, step=1)
+    num_personas = st.number_input("Ingrese el número de personas POB_URBANA:", min_value=1, step=1)
 
     # Realizar la predicción al presionar el botón
     if st.button("Predecir"):
