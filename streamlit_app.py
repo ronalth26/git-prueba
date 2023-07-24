@@ -51,6 +51,11 @@ def load_data():
                  )  # Reemplaza "dataset.csv" por la ruta a tu archivo CSV
     return data
 
+# Filtrar el dataset por la región seleccionada
+def filter_data_by_region(data, selected_region):
+    filtered_data = data[data["REG_NAT"] == selected_region]
+    return filtered_data
+
 # Entrenar el modelo de regresión
 def train_model(data):
     X = data["POB_TOTAL"].values.reshape(-1, 1)
@@ -67,11 +72,20 @@ def predict(model, num_personas):
     return prediction[0]
 
 def main():
-    st.title("Predicción de Residuos Domiciliarios")
+    st.title("Predicción de Residuos Domiciliarios por Región")
 
     # Cargar el dataset y entrenar el modelo
     data = load_data()
     model = train_model(data)
+
+    # Obtener la lista de regiones únicas en el dataset
+    regiones = data["REG_NAT"].unique()
+
+    # Widget de selección de región
+    selected_region = st.selectbox("Seleccionar Región", regiones)
+
+    # Filtrar el dataset por la región seleccionada
+    data_filtered = filter_data_by_region(data, selected_region)
 
     # Interfaz de usuario para ingresar el número de personas
     num_personas = st.number_input("Ingrese el número de personas:", min_value=1, step=1)
@@ -79,11 +93,10 @@ def main():
     # Realizar la predicción al presionar el botón
     if st.button("Predecir"):
         predicted_residuos = predict(model, num_personas)
-        st.write(f"El aproximado total de residuos en toneladas al año es: {predicted_residuos:.2f}")
+        st.write(f"El aproximado total de residuos en toneladas al año para la región {selected_region} es: {predicted_residuos:.2f}")
 
 if __name__ == "__main__":
     main()
-
 #----------------------------------------------------------------------------------------------------------------------------------------------
 
 
