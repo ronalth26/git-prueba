@@ -70,18 +70,22 @@ def train_model(data):
     X = data["POB_TOTAL"].values.reshape(-1, 1)
     y = data["QRESIDUOS_DOM"].values
 
+    # Aplicar una transformación logarítmica a y
+    y_log = np.log(y)
+
     poly_features = PolynomialFeatures(degree=2)
     X_poly = poly_features.fit_transform(X)
 
     model = LinearRegression()
-    model.fit(X_poly, y)
+    model.fit(X_poly, y_log)
 
     return model, poly_features
 
 # Realizar la predicción
 def predict(model, poly_features, num_personas):
     num_personas_poly = poly_features.transform([[num_personas]])
-    prediction = model.predict(num_personas_poly)
+    prediction_log = model.predict(num_personas_poly)
+    prediction = np.exp(prediction_log)
     return prediction[0]
 
 def main():
