@@ -78,8 +78,9 @@ def train_model(data):
 
     return model, poly_features
 
-def predict(model, poly_features, num_personas):
-    num_personas_poly = poly_features.transform([[num_personas]])
+def predict(model, poly_features, scaler, num_personas):
+    num_personas_scaled = scaler.transform(np.array([num_personas]).reshape(-1, 1))
+    num_personas_poly = poly_features.transform(num_personas_scaled)
     prediction = model.predict(num_personas_poly)
     return max(prediction[0], 0)  # Asegurar que la predicción no sea menor a cero
 
@@ -90,6 +91,11 @@ def main():
     data = load_data()
     df_residuos_cleaned = preparar_datos(data)
     model, poly_features = train_model(df_residuos_cleaned)
+
+    # Ajustar la escala de los datos
+    scaler = MinMaxScaler()
+    X = df_residuos_cleaned["POB_TOTAL"].values.reshape(-1, 1)
+    scaler.fit(X)
 
     # Obtener la lista de departamentos únicos en el dataset
     departamentos = df_residuos_cleaned["DEPARTAMENTO"].unique()
@@ -105,7 +111,7 @@ def main():
 
     # Realizar la predicción al presionar el botón
     if st.button("Predecir"):
-        predicted_residuos = predict(model, poly_features, num_personas)
+        predicted_residuos = predict(model, poly_features, scaler, num_personas)
         st.write(f"El aproximado total de residuos en toneladas al año para el departamento {selected_departamento} es: {predicted_residuos:.2f} toneladas")
 
     # Gráfico de dispersión interactivo
@@ -125,7 +131,8 @@ def main():
     st.subheader("Comparación entre Valor Real y Valor Predicho")
     y_real = data_filtered["QRESIDUOS_DOM"].values
     X_test = np.array([num_personas]).reshape(-1, 1)
-    X_test_poly = poly_features.transform(X_test)
+    X_test_scaled = scaler.transform(X_test)
+    X_test_poly = poly_features.transform(X_test_scaled)
     y_pred = model.predict(X_test_poly)
     df_comparacion = pd.DataFrame({"Valor": ["Real", "Predicho"],
                                    "Cantidad de Residuos (toneladas)": [y_real.mean(), max(y_pred[0], 0)]})
