@@ -107,26 +107,6 @@ def main():
 
     if st.button("Predecir"):
         predicted_residuos = predict(model, poly_features, num_personas)
-        st.write(f"El aproximado total de residuos en toneladas al año para el departamento {selected_departamento} es: {predicted_residuos:.2f}")
-
-if __name__ == "__main__":
-    main()
-
-def main():
-    st.title("Predicción de Residuos Domiciliarios por Departamento")
-
-    data = load_data()
-
-    departamentos = data["DEPARTAMENTO"].unique()
-
-    selected_departamento = st.selectbox("Seleccionar Departamento", departamentos)
-
-    model, poly_features = train_model(data, selected_departamento)
-
-    num_personas = st.number_input("Ingrese el número de personas POB_URBANA:", min_value=1, step=1)
-
-    if st.button("Predecir"):
-        predicted_residuos = predict(model, poly_features, num_personas)
 
         # Calcular el valor promedio de residuos para el departamento seleccionado
         data_filtered = data[data["DEPARTAMENTO"] == selected_departamento]
