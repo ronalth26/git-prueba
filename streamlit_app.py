@@ -65,7 +65,6 @@ def load_data():
 def preparar_datos(df):
     # Implementa aquí la función para el preprocesamiento y limpieza de datos si es necesario.
     # Asegúrate de convertir las columnas relevantes a valores numéricos y eliminar filas con valores faltantes.
-    df['QRESIDUOS_DOM'] = df['QRESIDUOS_DOM'].str.replace(',', '.').astype(float)  # Reemplazar ',' por '.' y convertir a float
     df = df.dropna(subset=['DEPARTAMENTO', 'POB_TOTAL', 'QRESIDUOS_DOM'])  # Eliminar filas con valores faltantes
     return df
 
