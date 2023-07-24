@@ -53,7 +53,7 @@ def load_data():
 
 # Filtrar el dataset por la región seleccionada
 def filter_data_by_region(data, selected_region):
-    filtered_data = data[data["REG_NAT"] == selected_region]
+    filtered_data = data[data["DEPARTAMENTO"] == selected_region]
     return filtered_data
 
 # Entrenar el modelo de regresión
@@ -79,7 +79,7 @@ def main():
     model = train_model(data)
 
     # Obtener la lista de regiones únicas en el dataset
-    regiones = data["REG_NAT"].unique()
+    regiones = data["DEPARTAMENTO"].unique()
 
     # Widget de selección de región
     selected_region = st.selectbox("Seleccionar Región", regiones)
