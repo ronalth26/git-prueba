@@ -58,60 +58,92 @@ st.subheader('El objetivo sería determinar si existe una relación lineal entre
 #prueba#
 #----------------------------------------------------------------------------------------------------------------------------------------------
 
+# Función para cargar los datos desde un archivo CSV en línea y devolver un DataFrame
 def load_data():
     df_residuos = pd.read_csv('https://raw.githubusercontent.com/ronalth26/git-prueba/master/lista-residuos.csv', sep=';', encoding='iso-8859-1')
     return df_residuos
 
+# Función para preprocesar y limpiar los datos eliminando filas con valores faltantes
 def preparar_datos(df):
     df = df.dropna(subset=['DEPARTAMENTO', 'POB_TOTAL', 'QRESIDUOS_DOM'])  # Eliminar filas con valores faltantes
     return df
 
+# Función para entrenar el modelo de regresión polinómica para un departamento específico
 def train_model(data, departamento):
+  
+    # Filtrar los datos por el departamento seleccionado
     data_filtered = data[data["DEPARTAMENTO"] == departamento]
     X = data_filtered["POB_TOTAL"].values.reshape(-1, 1)
     y = data_filtered["QRESIDUOS_DOM"].values
 
+    # Filtrar filas con valores iguales a 0 en la columna QRESIDUOS_DOM
     mask_nonzero = y != 0
     X = X[mask_nonzero]
     y = y[mask_nonzero]
 
+    # Aplicar log shift (sumar epsilon) para evitar logaritmo de valores iguales a 0
     epsilon = 1e-10
     y_log = np.log(y + epsilon)
 
+    # Crear características polinómicas de grado 2 para las variables de entrada
     poly_features = PolynomialFeatures(degree=2)
     X_poly = poly_features.fit_transform(X)
 
+    # Entrenar el modelo de regresión lineal
     model = LinearRegression()
     model.fit(X_poly, y_log)
 
     return model, poly_features
 
+# Función para realizar la predicción de la generación de residuos para un número de personas dado
 def predict(model, poly_features, num_personas):
+    # Transformar el número de personas a características polinómicas de grado 2
     num_personas_poly = poly_features.transform([[num_personas]])
     prediction_log = model.predict(num_personas_poly)
     prediction = np.exp(prediction_log)
     return prediction[0]
 
+# Función principal donde se carga el dataset, se entrena el modelo y se realiza la predicción
 def main():
     st.title("Predicción de Residuos Domiciliarios por Departamento")
 
+    # Cargar el dataset
     data = load_data()
 
+    # Obtener la lista de departamentos únicos en el dataset
     departamentos = data["DEPARTAMENTO"].unique()
 
+    # Widget de selección de departamento
     selected_departamento = st.selectbox("Seleccionar Departamento", departamentos)
 
+    # Entrenar el modelo y obtener las características (poly_features) para el departamento seleccionado
     model, poly_features = train_model(data, selected_departamento)
 
+    # Interfaz de usuario para ingresar el número de personas
     num_personas = st.number_input("Ingrese el número de personas POB_URBANA:", min_value=1, step=1)
 
+    # Realizar la predicción al presionar el botón
     if st.button("Predecir"):
+        # Realizar la predicción para el departamento seleccionado y el número de personas ingresado
         predicted_residuos = predict(model, poly_features, num_personas)
 
-        # Calcular el valor promedio de residuos para el departamento seleccionado
-        data_filtered = data[data["DEPARTAMENTO"] == selected_departamento]
-        mean_residuos = data_filtered["QRESIDUOS_DOM"].mean()
+        # Crear un DataFrame para la predicción de todos los departamentos
+        df_pred_all = pd.DataFrame(columns=['Departamento', 'Residuos (toneladas)'])
+        for departamento in departamentos:
+            model_dep, _ = train_model(data, departamento)
+            prediction = predict(model_dep, poly_features, num_personas)
+            df_pred_all = df_pred_all.append({'Departamento': departamento, 'Residuos (toneladas)': prediction}, ignore_index=True)
 
+        # Crear el gráfico de barras con Altair para la predicción de todos los departamentos
+        chart_all = alt.Chart(df_pred_all).mark_bar().encode(
+            x='Departamento',
+            y='Residuos (toneladas)'
+        )
+
+        # Mostrar el gráfico de barras en Streamlit para la predicción de todos los departamentos
+        st.altair_chart(chart_all)
+
+        # Mostrar el resultado de la predicción para el departamento seleccionado y el valor promedio de residuos
         st.write(f"El aproximado total de residuos en toneladas al año para el departamento {selected_departamento} es: {predicted_residuos:.2f} toneladas.")
         st.write(f"El valor promedio de residuos en toneladas para el departamento {selected_departamento} es: {mean_residuos:.2f} toneladas.")
 
