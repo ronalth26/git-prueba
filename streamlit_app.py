@@ -95,20 +95,20 @@ def predict(model, poly_features, num_personas):
     return prediction[0]
 
 def main():
-    st.title("Predicción de Residuos Domiciliarios por Región")
+    st.title("Predicción de Residuos Domiciliarios por Departamento")
 
     # Cargar el dataset y entrenar el modelo
     data = load_data()
     model, poly_features = train_model(data)
 
-    # Obtener la lista de regiones únicas en el dataset
-    regiones = data["REG_NAT"].unique()
+    # Obtener la lista de departamentos únicos en el dataset
+    departamentos = data["DEPARTAMENTO"].unique()
 
-    # Widget de selección de región
-    selected_region = st.selectbox("Seleccionar Región", regiones)
+    # Widget de selección de departamento
+    selected_departamento = st.selectbox("Seleccionar Departamento", departamentos)
 
-    # Filtrar el dataset por la región seleccionada
-    data_filtered = data[data["REG_NAT"] == selected_region]
+    # Filtrar el dataset por el departamento seleccionado
+    data_filtered = data[data["DEPARTAMENTO"] == selected_departamento]
 
     # Interfaz de usuario para ingresar el número de personas
     num_personas = st.number_input("Ingrese el número de personas:", min_value=1, step=1)
@@ -116,11 +116,10 @@ def main():
     # Realizar la predicción al presionar el botón
     if st.button("Predecir"):
         predicted_residuos = predict(model, poly_features, num_personas)
-        st.write(f"El aproximado total de residuos en toneladas al año para la región {selected_region} es: {predicted_residuos:.2f}")
+        st.write(f"El aproximado total de residuos en toneladas al año para el departamento {selected_departamento} es: {predicted_residuos:.2f}")
 
 if __name__ == "__main__":
     main()
-
 #----------------------------------------------------------------------------------------------------------------------------------------------
 
 
